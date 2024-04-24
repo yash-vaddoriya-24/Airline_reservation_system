@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Airline Reservation System</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+<!--    <link href="img/favicon.ico" rel="icon">-->
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" th:href="@{Images/title_logo.png}" type="text/x-icon">
+    <!-- Template Stylesheet -->
+    <link th:href="@{/CSS/style.css}" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container-xxl bg-white p-0">
+
+
+        <!-- Header Start -->
+        <div class="container-fluid bg-dark px-0">
+            <div class="row gx-0">
+                <div class="col-lg-3 bg-dark d-none d-lg-block">
+                    <a href="admin_login_pass.html" class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+                        <h1 class="m-0 text-primary text-uppercase">AirReserve</h1>
+                    </a>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row gx-0 bg-white d-none d-lg-flex">
+                        <div class="col-lg-7 px-5 text-start">
+                            <div class="h-100 d-inline-flex align-items-center py-2 me-4">
+                                <i class="fa fa-envelope text-primary me-2"></i>
+                                <p class="mb-0">info@example.com</p>
+                            </div>
+                            <div class="h-100 d-inline-flex align-items-center py-2">
+                                <i class="fa fa-phone-alt text-primary me-2"></i>
+                                <p class="mb-0">+012 345 6789</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 px-5 text-end">
+                            <div class="d-inline-flex align-items-center py-2">
+                                <a class="me-3" href=""><i class="fab fa-facebook-f"></i></a>
+                                <a class="me-3" href=""><i class="fab fa-twitter"></i></a>
+                                <a class="me-3" href=""><i class="fab fa-linkedin-in"></i></a>
+                                <a class="me-3" href=""><i class="fab fa-instagram"></i></a>
+                                <a class="" href=""><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
+                        <a href="admin_login_pass.html" class="navbar-brand d-block d-lg-none">
+                            <h1 class="m-0 text-primary text-uppercase">AirReserve</h1>
+                        </a>
+                        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                            <div class="navbar-nav mr-auto py-0">
+                                <a href="admin_login_pass.html" class="nav-item nav-link active">Home</a>
+                                <a href="addflights.html" class="nav-item nav-link"><small>Add Flights</small></a>
+                                <a href="delflight.html" class="nav-item nav-link"><small>Delete Flights</small></a>
+                                <a href="updateflight.html" class="nav-item nav-link"><small>Update Flights</small></a>
+
+                            </div>
+                            <form action="logout" method="post">
+                                <button th:if="${session.adminSuccess}" type="submit"
+                                        class="btn btn-primary rounded-0 py-4 px-md-5 d-none d-lg-block">Logout
+                                    <i class="fa fa-arrow-right ms-3"></i></button>
+                            </form>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Header End -->
+
+        <!-- Page Header Start -->
+        <div class="container-fluid page-header mb-5 p-0" th:style="'background-image: url(\'/Images/carousel-1.jpg\');'">
+            <div class="container-fluid page-header-inner py-5">
+                <div class="container text-center pb-5">
+                    <h1 class="display-3 text-white mb-3 animated slideInDown">Admin Dashboard</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center text-uppercase">
+                            <li class="breadcrumb-item"><a href="admin_login_pass.html">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Admin Dashboard</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Page Header End -->
+
+        <!-- Adding From -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row g-5">
+                    <div style="flex: auto;">
+                        <div class="wow fadeInUp" data-wow-delay="0.2s">
+                            <form id="search_flight_by_fno">
+                                <div class="row g-3">
+                                    <h3 class="mb-4 text-center">Search Flights<span
+                                            class="text-primary text-uppercase"> <small>By Flight
+                                                Number</small></span></h3>
+                                    <h6 class="text-start text-primary text-center text-uppercase"> <small>Search
+                                            Flights By Flight Number</small> </h6>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="fname" name="flight_no"
+                                                placeholder="Flight Number">
+                                            <label for="fname">Flight Number</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn btn-primary w-100 py-3" type="submit">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div style="color:red; font-size: larger; display: flex; justify-content: center; align-items: center; margin-top: 1rem;"
+                         th:if="${session.deleteSuccess}" class="error"
+                         th:text="${session.deleteSuccess}">
+                    </div>
+                    <div style="color:red; font-size: larger; display: flex; justify-content: center; align-items: center; margin-top: 1rem;"
+                         th:if="${errorMessage}" class="error"
+                         th:text="${errorMessage}">
+                    </div>
+                    <div id="showDetails" style="
+                            display:none;
+                            width: 700px;
+                            margin: 30px auto;
+                            padding: 20px;
+                            border: 2px solid #000;
+                            box-sizing: border-box; ">
+                        <form method="post" id="deleteFlightForm" action="deleteFlightDetails">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">Flight No:</span>
+                                <input type="text" class="form-control" id="flight_no" name="flight_no"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">Flight Name:</span>
+                                <input type="text" class="form-control" id="flight_name" name="flight_name"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">From City:</span>
+                                <input type="text" class="form-control" id="from_city1" name="from_city1"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">To City:</span>
+                                <input type="text" class="form-control" id="to_city1" name="to_city1"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">Date of Flight</span>
+                                <input type="text" class="form-control" id="date_of_flight" name="date_of_flight"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">Arrival Time:</span>
+                                <input type="text" class="form-control" id="arrival_time" name="arrival_time"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div>
+                                <input type="hidden" id="flightId" name="flightId" >
+                                <button class="btn btn-primary" type="button" id="deleteFlight">Delete Flight</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Adding End -->
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-dark text-light footer wow fadeIn" data-wow-delay="0.1s">
+            <div class="container pb-5">
+                <div class="row g-5">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="bg-primary rounded p-4">
+                            <a href="admin_login_pass.html">
+                                <h1 class="text-white text-uppercase mb-3">AirReserve</h1>
+                            </a>
+                            <p class="text-white mb-0">
+                                The website and backend mechanism are designed and developed by <a class="text-dark fw-medium" href="https://www.facebook.com/AlphaTanmoy/">Tanmoy Das</a> hope it's attractive and can be a demo of an actual airline system.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h6 class="section-title text-start text-primary text-uppercase mb-4">Contact</h6>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Baguihati, Brainware</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+91 82405 70310</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>dtanmoy169@gmail.com</p>
+                        <div class="d-flex pt-2">
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-12">
+                        <div class="row gy-5 g-4">
+                            <div class="col-md-6">
+                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Company</h6>
+                                <a class="btn btn-link" href="#">About Us</a>
+                                <a class="btn btn-link" href="#">Contact Us</a>
+                                <a class="btn btn-link" href="#">Our Team</a>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Services</h6>
+                                <a class="btn btn-link" href="#">Already a User</a>
+                                <a class="btn btn-link" href="#">New Registration</a>
+                                <a class="btn btn-link" href="#">Admin Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom" href="index.jsp"> AirReserve </a>, All Right Reserved. Designed By <a class="border-bottom">Tanmoy Das</a>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="footer-menu">
+                                <a href="admin_login_pass.html">Home</a>
+                                <a href="#">About</a>
+                                <a href="#">Booking</a>
+                                <a href="#">Check Status</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script th:src="@{/JS/availibility.js}"></script>
+    <script>
+        document.getElementById("deleteFlight").addEventListener("click", function() {
+            var flightId = document.getElementById("flight_no").value;
+            document.getElementById("flightId").value = flightId;
+            document.getElementById("deleteFlightForm").submit();
+            console.log(flightId);
+        });
+    </script>
+</body>
+
+</html>

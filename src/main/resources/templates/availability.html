@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Airline Reservation System</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" th:href="@{Images/title_logo.png}" type="text/x-icon">
+    <!-- Template Stylesheet -->
+    <link th:href="@{/CSS/style.css}" rel="stylesheet">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            font-size: x-large;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Header Start -->
+        <div class="container-xxl bg-white p-0">
+            <!-- Spinner Start -->
+
+            <!-- Spinner End -->
+
+            <!-- Header Start -->
+            <div class="container-fluid bg-dark px-0">
+                <div class="row gx-0">
+                    <div class="col-lg-3 bg-dark d-none d-lg-block">
+                        <a href="index.html"
+                           class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+                            <h1 class="m-0 text-primary text-uppercase">AirReserve</h1>
+                        </a>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="row gx-0 bg-white d-none d-lg-flex">
+                            <div class="col-lg-7 px-5 text-start">
+                                <div class="h-100 d-inline-flex align-items-center py-2 me-4">
+                                    <i class="fa fa-envelope text-primary me-2"></i>
+                                    <p class="mb-0">yashvaddoriya120@gmail.com</p>
+                                </div>
+                                <div class="h-100 d-inline-flex align-items-center py-2">
+                                    <i class="fa fa-phone-alt text-primary me-2"></i>
+                                    <p class="mb-0">+91 82405 70310</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 px-5 text-end">
+                                <div class="d-inline-flex align-items-center py-2">
+                                    <a class="me-3" href=""><i class="fab fa-facebook-f"></i></a>
+                                    <a class="me-3" href=""><i class="fab fa-twitter"></i></a>
+                                    <a class="me-3" href=""><i class="fab fa-linkedin-in"></i></a>
+                                    <a class="me-3" href=""><i class="fab fa-instagram"></i></a>
+                                    <a class="" href=""><i class="fab fa-youtube"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
+                            <a href="index.html" class="navbar-brand d-block d-lg-none">
+                                <h1 class="m-0 text-primary text-uppercase">AirReserve</h1>
+                            </a>
+                            <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
+                                    data-bs-target="#navbarCollapse">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                                <div class="navbar-nav mr-auto py-0">
+                                    <a href="index.html" class="nav-item nav-link">Home</a>
+                                    <a href="about.html" class="nav-item nav-link active">About</a>
+                                    <a href="availability.html" class="nav-item nav-link">Check Availability</a>
+                                    <a th:unless="${session.customerUsername}" href="booking_error_msg.html" class="nav-item nav-link">Booking</a>
+                                    <a th:if="${session.customerUsername}" href="booking.html" class="nav-item nav-link">Booking</a>
+                                    <a th:if="${session.customerUsername}" href="Cancellation.html"
+                                       class="nav-item nav-link">Cancellation</a>
+                                    <div class="nav-item dropdown" th:unless="${session.customerUsername}">
+                                        <a href="#" class="nav-link dropdown-toggle"
+                                           data-bs-toggle="dropdown">Login/Register</a>
+                                        <div class="dropdown-menu rounded-0 m-0">
+                                            <a href="login.html" class="dropdown-item">Login</a>
+                                            <a href="register.html" class="dropdown-item">Register</a>
+                                        </div>
+                                    </div>
+                                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                                </div>
+                                <form action="logout" method="post">
+                                    <button th:if="${session.customerUsername}" type="submit"
+                                            class="btn btn-primary rounded-0 py-4 px-md-5 d-none d-lg-block">Logout
+                                        As<small>
+                                            <span th:text="${session.customerUsername}"></span>
+                                        </small><i class="fa fa-arrow-right ms-3"></i></button>
+                                </form>
+                                <a th:unless="${session.customerUsername}" href="adminlogin.html"
+                                   class="btn btn-primary rounded-0 py-4 px-md-5 d-none d-lg-block">Admin Panel<i
+                                        class="fa fa-arrow-right ms-3"></i></a>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- Header End -->
+
+            <!-- Page Header Start -->
+            <div class="container-fluid page-header mb-5 p-0"
+                th:style="'background-image: url(' + @{Images/carousel-1.jpg} + ');'">
+                <div class="container-fluid page-header-inner py-5">
+                    <div class="container text-center pb-5">
+                        <h1 class="display-3 text-white mb-3 animated slideInDown">Search Flights</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb justify-content-center text-uppercase">
+                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                <li class="breadcrumb-item text-white active" aria-current="page">Search Flights</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- Page Header End -->
+        </div>
+
+        <!-- Searching Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row g-5">
+                    <div style="flex: auto;">
+                        <div class="wow fadeInUp" data-wow-delay="0.2s">
+                            <form id="search_flight_by_fno">
+                                <div class="row g-3">
+                                    <h3 class="mb-4 text-center">Search Flights<span
+                                            class="text-primary text-uppercase"> <small>By Flight
+                                                Number</small></span></h3>
+                                    <h6 class="text-start text-primary text-center text-uppercase"> <small>Search
+                                            Flights By Flight Number</small> </h6>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="fname" name="flight_no"
+                                                placeholder="Flight Number">
+                                            <label for="fname">Flight Number</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn btn-primary w-100 py-3" type="submit">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="showDetails" style="
+                            display:none;
+                            width: 700px;
+                            margin: 30px auto;
+                            padding: 20px;
+                            border: 2px solid #000;
+                            box-sizing: border-box; ">
+                        <form>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">Flight No:</span>
+                                <input type="text" class="form-control" id="flight_no" name="flight_no"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon2">Flight Name:</span>
+                                <input type="text" class="form-control" id="flight_name" name="flight_name"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon3">From City:</span>
+                                <input type="text" class="form-control" id="from_city1" name="from_city1"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon4">To City:</span>
+                                <input type="text" class="form-control" id="to_city1" name="to_city1"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon5">Date of Flight</span>
+                                <input type="text" class="form-control" id="date_of_flight" name="date_of_flight"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon6">Arrival Time:</span>
+                                <input type="text" class="form-control" id="arrival_time" name="arrival_time"
+                                    aria-describedby="basic-addon1" readonly>
+                            </div>
+                        </form>
+                    </div>
+                    <div style="display: flex; justify-content: center;align-items: center; margin: 20px;">
+                        <p id="errorMessage" style="display:none; color:red; font-size: larger;">No data available</p>
+                    </div>
+                    <div class="col-lg-12" style="margin-top: 5%;">
+                        <div class="wow fadeInUp" data-wow-delay="0.2s">
+                            <form method="get" th:action="@{/flightDetailsByCity}" th:object="${flightDetails}">
+                                <div class="row g-2">
+                                    <h3 class="mb-4 text-center">Search Flights<span
+                                            class="text-primary text-uppercase">
+                                            <small>By From-To Citys</small></span></h3>
+                                    <h6 class="text-start text-primary text-uppercase text-center"> <small>Search
+                                            Flights By Citys </small></h6>
+                                    <div class="col-md-4">
+                                        <label>From City</label>
+                                        <select class="form-select" name="from_city" id="from_city">
+                                            <option selected>Departure City Name</option>
+                                            <option value="Ahmedabad Airport - AMD">Ahmedabad Airport - AMD</option>
+                                            <option value="Amritsar Airport - LUH">Amritsar Airport - LUH</option>
+                                            <option value="Bagdogra Airport - IXB">Bagdogra Airport - IXB</option>
+                                            <option value="Bengaluru International Airport - BLR">Bengaluru
+                                                International Airport - BLR</option>
+                                            <option value="Bhopal Airport - BHO">Bhopal Airport - BHO</option>
+                                            <option value="Bhubaneswar Airport - BBI">Bhubaneswar Airport - BBI
+                                            </option>
+                                            <option value="Birsa Munda International Airport - IXR">Birsa Munda
+                                                International Airport - IXR</option>
+                                            <option value="Chandigarh Airport - IXC">Chandigarh Airport - IXC
+                                            </option>
+                                            <option value="Chennai International Airport - MAA">Chennai
+                                                International Airport - MAA</option>
+                                            <option value="Chhatrapati Shivaji International Airport - BOM">
+                                                Chhatrapati Shivaji International Airport - BOM</option>
+                                            <option value="Cochin International Airport - COK">Cochin International
+                                                Airport - COK</option>
+                                            <option value="Cooch Behar Airport - COH">Cooch Behar Airport - COH
+                                            </option>
+                                            <option value="Dabok Airport - UDR">Dabok Airport - UDR</option>
+                                            <option value="Dabolim Airport - GOI">Dabolim Airport - GOI</option>
+                                            <option value="Darjeeling Airport - DAI">Darjeeling Airport - DAI
+                                            </option>
+                                            <option value="Dehra Dun Airport - DED">Dehra Dun Airport - DED</option>
+                                            <option value="Devi Ahilyabai Holkar Airport - IDR">Devi Ahilyabai
+                                                Holkar Airport - IDR</option>
+                                            <option value="Dhanbad Airport - DBD">Dhanbad Airport - DBD</option>
+                                            <option value="Gaya Airport - GAY">Gaya Airport - GAY</option>
+                                            <option value="Hyderabad International Airport - HYD">Hyderabad
+                                                International Airport - HYD</option>
+                                            <option value="Indira Gandhi International Airport - DEL">Indira Gandhi
+                                                International Airport - DEL</option>
+                                            <option value="Jabalpur Airport - JLR">Jabalpur Airport - JLR</option>
+                                            <option value="Jagdalpur Airport - JGB">Jagdalpur Airport - JGB</option>
+                                            <option value="Jaisalmer Airport - JSA">Jaisalmer Airport - JSA</option>
+                                            <option value="Jodhpur Airport - JDH">Jodhpur Airport - JDH</option>
+                                            <option value="Kanpur Airport - KNU">Kanpur Airport - KNU</option>
+                                            <option value="Kota Airport - KTU">Kota Airport - KTU</option>
+                                            <option value="Lohegaon Airport - PNQ">Lohegaon Airport - PNQ</option>
+                                            <option value="Malda Airport - LDA">Malda Airport - LDA</option>
+                                            <option value="Mysore Airport - MYQ">Mysore Airport - MYQ</option>
+                                            <option value="Netaji Subhash Chandra Bose International Airport - CCU">
+                                                Netaji Subhash Chandra Bose International Airport - CCU</option>
+                                            <option value="Patna Airport - PAT">Patna Airport - PAT</option>
+                                            <option value="Pondicherry Airport - PNY">Pondicherry Airport - PNY
+                                            </option>
+                                            <option value="Raipur Airport - RPR">Raipur Airport - RPR</option>
+                                            <option value="Rajkot Airport - RAJ">Rajkot Airport - RAJ</option>
+                                            <option value="Rourkela Airport - RRK">Rourkela Airport - RRK</option>
+                                            <option value="Satwari Airport - IXJ">Satwari Airport - IXJ</option>
+                                            <option value="Simla Airport - SLV">Simla Airport - SLV</option>
+                                            <option value="Singerbhil Airport - IXA">Singerbhil Airport - IXA
+                                            </option>
+                                            <option value="Sonari Airport - IXW">Sonari Airport - IXW</option>
+                                            <option value="Sonegaon Airport - NAG">Sonegaon Airport - NAG</option>
+                                            <option value="Srinagar Airport - SXR">Srinagar Airport - SXR</option>
+                                            <option value="Surat Airport - STV">Surat Airport - STV</option>
+                                            <option value="Tirupati Airport - TIR">Tirupati Airport - TIR</option>
+                                            <option value="Trichy Airport - TRZ">Trichy Airport - TRZ</option>
+                                            <option value="Varanasi Airport - VNS">Varanasi Airport - VNS</option>
+                                            <option value="Warangal Airport - WGC">Warangal Airport - WGC</option>
+                                        </select>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>To City</label>
+                                        <select class="form-select" name="to_city" id="to_city">
+                                            <option selected>Arrival City Name</option>
+                                            <option value="Ahmedabad Airport - AMD">Ahmedabad Airport - AMD</option>
+                                            <option value="Amritsar Airport - LUH">Amritsar Airport - LUH</option>
+                                            <option value="Bagdogra Airport - IXB">Bagdogra Airport - IXB</option>
+                                            <option value="Bengaluru International Airport - BLR">Bengaluru
+                                                International Airport - BLR</option>
+                                            <option value="Bhopal Airport - BHO">Bhopal Airport - BHO</option>
+                                            <option value="Bhubaneswar Airport - BBI">Bhubaneswar Airport - BBI
+                                            </option>
+                                            <option value="Birsa Munda International Airport - IXR">Birsa Munda
+                                                International Airport - IXR</option>
+                                            <option value="Chandigarh Airport - IXC">Chandigarh Airport - IXC
+                                            </option>
+                                            <option value="Chennai International Airport - MAA">Chennai
+                                                International Airport - MAA</option>
+                                            <option value="Chhatrapati Shivaji International Airport - BOM">
+                                                Chhatrapati Shivaji International Airport - BOM</option>
+                                            <option value="Cochin International Airport - COK">Cochin International
+                                                Airport - COK</option>
+                                            <option value="Cooch Behar Airport - COH">Cooch Behar Airport - COH
+                                            </option>
+                                            <option value="Dabok Airport - UDR">Dabok Airport - UDR</option>
+                                            <option value="Dabolim Airport - GOI">Dabolim Airport - GOI</option>
+                                            <option value="Darjeeling Airport - DAI">Darjeeling Airport - DAI
+                                            </option>
+                                            <option value="Dehra Dun Airport - DED">Dehra Dun Airport - DED</option>
+                                            <option value="Devi Ahilyabai Holkar Airport - IDR">Devi Ahilyabai
+                                                Holkar Airport - IDR</option>
+                                            <option value="Dhanbad Airport - DBD">Dhanbad Airport - DBD</option>
+                                            <option value="Gaya Airport - GAY">Gaya Airport - GAY</option>
+                                            <option value="Hyderabad International Airport - HYD">Hyderabad
+                                                International Airport - HYD</option>
+                                            <option value="Indira Gandhi International Airport - DEL">Indira Gandhi
+                                                International Airport - DEL</option>
+                                            <option value="Jabalpur Airport - JLR">Jabalpur Airport - JLR</option>
+                                            <option value="Jagdalpur Airport - JGB">Jagdalpur Airport - JGB</option>
+                                            <option value="Jaisalmer Airport - JSA">Jaisalmer Airport - JSA</option>
+                                            <option value="Jodhpur Airport - JDH">Jodhpur Airport - JDH</option>
+                                            <option value="Kanpur Airport - KNU">Kanpur Airport - KNU</option>
+                                            <option value="Kota Airport - KTU">Kota Airport - KTU</option>
+                                            <option value="Lohegaon Airport - PNQ">Lohegaon Airport - PNQ</option>
+                                            <option value="Malda Airport - LDA">Malda Airport - LDA</option>
+                                            <option value="Mysore Airport - MYQ">Mysore Airport - MYQ</option>
+                                            <option value="Netaji Subhash Chandra Bose International Airport - CCU">
+                                                Netaji Subhash Chandra Bose International Airport - CCU</option>
+                                            <option value="Patna Airport - PAT">Patna Airport - PAT</option>
+                                            <option value="Pondicherry Airport - PNY">Pondicherry Airport - PNY
+                                            </option>
+                                            <option value="Raipur Airport - RPR">Raipur Airport - RPR</option>
+                                            <option value="Rajkot Airport - RAJ">Rajkot Airport - RAJ</option>
+                                            <option value="Rourkela Airport - RRK">Rourkela Airport - RRK</option>
+                                            <option value="Satwari Airport - IXJ">Satwari Airport - IXJ</option>
+                                            <option value="Simla Airport - SLV">Simla Airport - SLV</option>
+                                            <option value="Singerbhil Airport - IXA">Singerbhil Airport - IXA
+                                            </option>
+                                            <option value="Sonari Airport - IXW">Sonari Airport - IXW</option>
+                                            <option value="Sonegaon Airport - NAG">Sonegaon Airport - NAG</option>
+                                            <option value="Srinagar Airport - SXR">Srinagar Airport - SXR</option>
+                                            <option value="Surat Airport - STV">Surat Airport - STV</option>
+                                            <option value="Tirupati Airport - TIR">Tirupati Airport - TIR</option>
+                                            <option value="Trichy Airport - TRZ">Trichy Airport - TRZ</option>
+                                            <option value="Varanasi Airport - VNS">Varanasi Airport - VNS</option>
+                                            <option value="Warangal Airport - WGC">Warangal Airport - WGC</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-primary w-100 py-3" type="submit">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div th:if="${message}" class="error" th:text="${message}"></div>
+                    <table th:if="${not #lists.isEmpty(flightDetails)}" style="display: block; ">
+                        <thead>
+                            <tr>
+                                <th>Flight No</th>
+                                <th>Flight Name</th>
+                                <th>From City</th>
+                                <th>To City</th>
+                                <th>Date of Flight</th>
+                                <th>Arrival Time</th>
+                                <th>For Booking</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Iterate over the flightDetails list and display each flight detail -->
+                            <tr th:each="flightDetail : ${flightDetails}">
+                                <td th:text="${flightDetail.flightNo}">Flight No</td>
+                                <td th:text="${flightDetail.flightName}">Flight Name</td>
+                                <td th:text="${flightDetail.fromCity}">From City</td>
+                                <td th:text="${flightDetail.toCity}">To City</td>
+                                <td th:text="${flightDetail.dateOfFlight}">Date of Flight</td>
+                                <td th:text="${flightDetail.flightArrivalTime}">Arrival Time</td>
+                                <td>
+                                    <form method="post" action="validateLogin">
+                                        <input type="hidden" name="flightNo" th:value="${flightDetail.flightNo}">
+                                        <button type="submit" class="btn btn-primary">Book Now</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+                    <div style="display: flex; justify-content: center;align-items: center;">
+                        <p id="errorMessage" style="display:none; color:red;">No data available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Searching End -->
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-dark footer text-light wow fadeIn" data-wow-delay="0.1s">
+            <div class="container pb-5">
+                <div class="row g-5">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="bg-primary rounded p-4">
+                            <a href="index.html">
+                                <h1 class="text-white text-uppercase mb-3">AirReserve</h1>
+                            </a>
+                            <p class="text-white mb-0">
+                                The website and backend mechanism are designed and developed by <a
+                                    class="text-dark fw-medium" href="https://www.facebook.com/AlphaTanmoy/">Smit Patel, Yash Vaddoriya & Dhruvit Patel</a> hope it's attractive and can be a demo of an actual airline system.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h6 class="section-title text-start text-primary text-uppercase mb-4">Contact</h6>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>L.D College of Engineering, Ahmedabad</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+91 82405 70310</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>yashvaddoriya120@gmail.com</p>
+                        <div class="d-flex pt-2">
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-12">
+                        <div class="row gy-5 g-4">
+                            <div class="col-md-6">
+                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Company</h6>
+                                <a class="btn btn-link" href="about.html">About Us</a>
+                                <a class="btn btn-link" href="contact.html">Contact Us</a>
+                                <a class="btn btn-link" href="about.html">Our Team</a>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Services</h6>
+                                <a class="btn btn-link" href="login.html">Already a User</a>
+                                <a class="btn btn-link" href="register.html">New Registration</a>
+                                <a class="btn btn-link" href="adminlogin.html">Admin Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom" href="index.html"> AirReserve </a>, All Right Reserved.
+                            Designed By <a class="border-bottom">Dhruvit Patel</a>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="footer-menu">
+                                <a href="index.html">Home</a>
+                                <a href="about.html">About</a>
+                                <a href="booking_error_msg.html">Booking</a>
+                                <a href="availability.html">Check Status</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script th:src="@{/JS/main.js}"></script>
+    <script th:src="@{/JS/availibility.js}"></script>
+
+    </div>
+</body>
+
+</html>
