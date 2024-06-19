@@ -2,16 +2,17 @@
 function checkSessionAttributes() {
     function fetchSessionData() {
         // Send an AJAX request to the server to fetch session data
-        fetch('/getSessionData')
+        fetch('/otpValidation')
             .then(response => {
-                if (response.ok) {
+                if (response.ok && document.getElementById("otp")) {
                     // Session attribute present, reload the page
-
 
                 } else {
                     // Session attribute not present
-                    window.location.reload();
-                    console.log('Session attribute not present');
+                    if (document.getElementById("otp")) {
+                        window.location.reload();
+                        console.log('Session attributes not present');
+                    }
                 }
             })
             .catch(error => {

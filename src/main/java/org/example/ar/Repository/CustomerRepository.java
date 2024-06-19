@@ -15,7 +15,7 @@ public interface CustomerRepository extends JpaRepository<CustomerDetail, Long> 
 
     List<CustomerDetail> findByEmail(String email);
 
-    CustomerDetail findByUsernameAndAndPassword(String username, String password);
+    CustomerDetail findByUsernameAndAndPassword(String username, String Password);
 
     CustomerDetail findByToken(String token);
 
@@ -23,7 +23,7 @@ public interface CustomerRepository extends JpaRepository<CustomerDetail, Long> 
     @Query("UPDATE CustomerDetail c SET c.password = :newPassword where c.email = :email")
     int updatePasswordByEmail(String email, String newPassword);
 
-//    void delete(CustomerDetail customerDetail);
-//
-//    List<CustomerDetail> findByConfirmedFalseAndCreatedBefore(Timestamp created_date);
+    void delete(CustomerDetail customerDetail);
+
+    List<CustomerDetail> findByCreatedBeforeAndConfirmedFalse(Timestamp created);
 }

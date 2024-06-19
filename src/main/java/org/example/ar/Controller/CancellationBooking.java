@@ -16,6 +16,8 @@ import java.util.Random;
 @Controller
 public class CancellationBooking {
 
+    private static int count = 3;
+
     @Autowired
     BookingDetailRepository bookingDetailRepository;
 
@@ -52,9 +54,9 @@ public class CancellationBooking {
 
                     //sending otp
                     javaSmtpGmailSenderApplication.sendMail(bookingDetail.getEmail(), subject, body);
-                    model.addAttribute("PNRNumber", PNR);
+                    session.setAttribute("PNRNumber", PNR);
                     model.addAttribute("errorMessage", "OTP has been sent to the registered email id");
-                    model.addAttribute("otpGenerated", "otp sended successfully");
+                    session.setAttribute("otpGenerated", "otp sended successfully");
                     session.setAttribute("otp", otp);
                     session.setAttribute("otpCreationTime", otpCreationTime);
                     return "Cancellation";
@@ -76,26 +78,25 @@ public class CancellationBooking {
     @PostMapping("OTPVerification")
     public String OTPVerification(@RequestParam("otp") int userOtp, @RequestParam("PNRNumber") String PNR, Model model, HttpSession session) {
         try {
-            if (session.getAttribute("otp") != null) {
-                int maxInactiveIntervalInSeconds = 150; // 150 seconds
-                session.setMaxInactiveInterval(maxInactiveIntervalInSeconds);
+            if (session != null && session.getAttribute("otp") != null) {
                 Integer storedOTP = (Integer) session.getAttribute("otp");
                 Long otpOperationTime = (Long) session.getAttribute("otpCreationTime");
 
                 if (storedOTP != null && otpOperationTime != null) {
                     long currentTime = System.currentTimeMillis();
                     long otpAge = currentTime - otpOperationTime;
-                    long otpExpirationTime = 5 * 60 * 1000;
+                    long otpExpirationTime = 5 * 60 * 1000; // 5 Minutes
 
                     if (otpAge <= otpExpirationTime) {
                         if (userOtp == (storedOTP)) {
-                            session.removeAttribute("otp");
-                            session.removeAttribute("otpCreationTime");
                             Integer rowAffected = bookingDetailsService.deleteBookingDetailByPNR(PNR);
 
-                            if (rowAffected != null && rowAffected > 0) {
+                            if (rowAffected > 0) {
                                 model.addAttribute("errorMessage", "Booking detail deleted successfully");
-                                session.invalidate();
+                                session.removeAttribute("otp");
+                                session.removeAttribute("otpCreationTime");
+                                session.removeAttribute("otpGenerated");
+                                session.removeAttribute("PNRNumber");
                             } else {
                                 model.addAttribute("errorMessage", "An error occurred while deleting the booking detail");
                             }
@@ -103,15 +104,23 @@ public class CancellationBooking {
                             return "Cancellation";
                         } else {
                             //handling incorrect otp
-                            model.addAttribute("errorMessage", "Invalid-OTP");
-                            session.invalidate();
+                            count--;
+                            if (count == 0) {
+                                session.removeAttribute("PNRNumber");
+                                session.removeAttribute("otp");
+                                session.removeAttribute("otpCreationTime");
+                                session.removeAttribute("otpGenerated");
+                                model.addAttribute("errorMessage", "Session expired, please try again");
+                                return "Cancellation";
+                            }
+                            model.addAttribute("errorMessage", "Invalid-OTP, you have " + count + "more chance");
                             return "Cancellation";
                         }
                     } else {
                         session.removeAttribute("otp");
                         session.removeAttribute("otpCreationTime");
+                        session.removeAttribute("otpGenerated");
                         model.addAttribute("errorMessage", "OTP expired");
-                        session.invalidate();
                         return "Cancellation";
                     }
 
@@ -119,6 +128,8 @@ public class CancellationBooking {
                 } else {
                     model.addAttribute("errorMessage", "An error occurred while cancelling the booking");
                 }
+            } else {
+                return "redirect:/Cancellation";
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.sql.Timestamp;
 
@@ -29,8 +31,9 @@ public class CustomerDetail {
     private String state;
     private String pincode;
     private String token;
-    private boolean Confirmed;
+    private boolean confirmed;
     private Timestamp created;
+
 
     public CustomerDetail(String name, String username, String password, String email, String countryCode, String phoneNumber, String city, String state, String pincode) {
         this.name = name;
@@ -42,7 +45,7 @@ public class CustomerDetail {
         this.city = city;
         this.state = state;
         this.pincode = pincode;
-        this.Confirmed = false;
+        this.confirmed = false;
         this.created = new Timestamp(System.currentTimeMillis());
     }
 }

@@ -61,9 +61,11 @@ public class LoginController {
                         model.addAttribute("errorMessage", "An activation link for this email has already been sent. Please check your inbox and spam folder. If you haven't received it, please wait for a few minutes before requesting another activation link.");
                     else
                         model.addAttribute("errorMessage", "email address already in use");
-                    return "register";
-                }
 
+                } else
+                    model.addAttribute("errorMessage", "Email address already in use");
+
+                return "register";
             }
 
             CustomerDetail customerDetail = new CustomerDetail(fullname, username, password, email_address, countryCode, phno, city, state, pincode);
